@@ -42,8 +42,10 @@ www.instagram.com##div.xph46j
 ! =============================================
 ! HOME FEED — Hide "You've completely caught up" banner + all articles after it
 ! =============================================
-! Caught up banner and Suggested posts heading — under investigation
-! (rules temporarily removed; re-adding after isolating correct elements)
+! x1miatn0 confirmed: 4-child div wrapping only the caught-up component (June 2026)
+www.instagram.com##div.x1miatn0
+! x15mokao appears 64 times but text-scoped to the exact heading label
+www.instagram.com##div.x15mokao:has-text(/^Suggested posts$/)
 
 
 ! HOME FEED — Hide individually labelled suggested posts (belt-and-suspenders)
