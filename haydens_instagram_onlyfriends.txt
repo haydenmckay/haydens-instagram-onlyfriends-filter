@@ -43,11 +43,9 @@ www.instagram.com##div.xph46j
 ! HOME FEED — Hide "You've completely caught up" banner + all articles after it
 ! =============================================
 ! x1miatn0 appears exactly once — unique to the caught up component.
-! x15mokao is the parent div of the "Suggested posts" heading span.
-! The ~ combinator hides all article siblings that follow it (the suggested posts).
+! x15mokao appears 64 times (layout utility class) — must be scoped by text content.
 www.instagram.com##div.x1miatn0
-www.instagram.com##div.x15mokao
-www.instagram.com##div.x15mokao ~ article
+www.instagram.com##div.x15mokao:has-text(/^Suggested posts$/)
 
 
 ! HOME FEED — Hide individually labelled suggested posts (belt-and-suspenders)
