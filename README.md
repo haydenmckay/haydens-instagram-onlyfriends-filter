@@ -1,4 +1,4 @@
-# Instagram Focused Feed — Brave Shields Filter
+# Haydens Instagram OnlyFriends Filter — Brave Shields Filter
 
 A custom filter list for Brave Shields that strips Instagram mobile web down to what matters: your friends' posts, stories, messages, and profile — nothing else.
 
@@ -48,7 +48,7 @@ Works on desktop and mobile (Brave iOS/Android). Any updates pushed to this repo
 
 ## How it was built
 
-The filter was built by reverse-engineering Instagram's mobile DOM using Brave DevTools in mobile emulation mode (iPhone 12 Pro, 390px). Instagram uses Meta's Stylex atomic CSS system, which generates obfuscated single-property class names (e.g. `x1n2onr6`) that change frequently. Where possible, rules were anchored to stable attributes instead.
+The filter was built by inspecting Instagram's mobile DOM using Brave DevTools in mobile emulation mode (iPhone 12 Pro, 390px). Instagram uses Meta's Stylex atomic CSS system, which generates single-property class names (e.g. `x1n2onr6`) that change frequently. Where possible, rules were anchored to stable attributes instead.
 
 ### Rule breakdown
 
@@ -92,7 +92,7 @@ Sponsored posts contain a `facebook.com/ads/ig_redirect` URL as their ad click t
 Instagram's atomic CSS class names change with each deploy. Rules that rely on class names (currently only the explore grid rule) may stop working after updates. When a rule breaks:
 
 1. Open instagram.com in Brave with DevTools → mobile emulation (iPhone 12 Pro)
-2. Inspect the relevant element
+2. Use the element inspector to find the relevant container
 3. Find a stable attribute (`href`, `data-*`, `aria-label`, text content) to anchor to instead of classes
 4. Update the rule
 

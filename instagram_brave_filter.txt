@@ -1,4 +1,4 @@
-! Instagram Focused Feed — Brave Shields Custom Filter
+! Haydens Instagram OnlyFriends Filter — Brave Shields Custom Filter
 ! Version: 1.0
 ! Last verified: June 2026
 ! Tested on: Brave browser, Instagram mobile web (iPhone 12 Pro emulation, 390px)
