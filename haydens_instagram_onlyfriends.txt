@@ -40,12 +40,18 @@ www.instagram.com##a[href="/reels/"]
 www.instagram.com##div.xph46j
 
 ! =============================================
-! HOME FEED — Hide suggested posts
+! HOME FEED — Hide "You've completely caught up" banner + all articles after it
 ! =============================================
-! Instagram labels suggested posts with "Suggested post" as a standalone
-! line in the article text. The regex anchors to newlines to avoid false
-! matches on captions that happen to mention "suggested post".
-! Also catches "Suggested for you" variant used on some surfaces.
+! The banner and subsequent suggested posts share the same parent container.
+! Rule 1 hides the banner itself.
+! Rule 2 uses the CSS general sibling combinator ~ to hide all articles
+! that follow the banner in the DOM — these are the suggested/doom-scroll posts.
+www.instagram.com##div:has-text(You've completely caught up)
+www.instagram.com##div:has-text(You've completely caught up) ~ article
+
+! HOME FEED — Hide individually labelled suggested posts (belt-and-suspenders)
+! =============================================
+! Catches any suggested posts that appear before the caught up banner.
 www.instagram.com##article:has-text(/\nSuggested post\n/)
 www.instagram.com##article:has-text(/\nSuggested for you\n/)
 www.instagram.com##article:has-text(/\nSuggested\n/)
