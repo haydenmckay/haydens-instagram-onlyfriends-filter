@@ -47,8 +47,7 @@ www.instagram.com##div.xph46j
 ! Rule 2 uses native CSS :has() + ~ sibling combinator to hide all articles
 ! that follow the banner — these are the suggested/doom-scroll posts.
 ! Note: x6s0dn4 is a Stylex atomic class that may change with Instagram deploys.
-www.instagram.com##div:has(> div > div.x6s0dn4)
-www.instagram.com##div:has(> div > div.x6s0dn4) ~ article
+www.instagram.com##div:has-text(You've completely caught up)
 
 ! HOME FEED — Hide individually labelled suggested posts (belt-and-suspenders)
 ! =============================================
