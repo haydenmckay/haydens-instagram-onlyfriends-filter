@@ -48,6 +48,7 @@ www.instagram.com##div.xph46j
 ! Also catches "Suggested for you" variant used on some surfaces.
 www.instagram.com##article:has-text(/\nSuggested post\n/)
 www.instagram.com##article:has-text(/\nSuggested for you\n/)
+www.instagram.com##article:has-text(/\nSuggested\n/)
 
 ! =============================================
 ! HOME FEED — Hide sponsored posts
