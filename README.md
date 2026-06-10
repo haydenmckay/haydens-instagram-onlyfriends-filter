@@ -29,7 +29,7 @@ A custom filter list for Brave Shields that strips Instagram mobile web down to 
 2. Scroll to **Content filtering** → **Add custom filter list**
 3. Paste this URL:
    ```
-   https://raw.githubusercontent.com/haydenmckay/haydens-instagram-onlyfriends-filter/main/instagram_brave_filter.txt
+   https://raw.githubusercontent.com/haydenmckay/haydens-instagram-onlyfriends-filter/main/haydens_instagram_onlyfriends.txt
    ```
 4. Click **Add**
 5. Reload `instagram.com`
@@ -40,7 +40,7 @@ Works on desktop and mobile (Brave iOS/Android). Any updates pushed to this repo
 
 1. Open Brave → `brave://settings/shields`
 2. Scroll to **Content filtering** → **Create custom filters**
-3. Paste the contents of `instagram_brave_filter.txt`
+3. Paste the contents of `haydens_instagram_onlyfriends.txt`
 4. Click **Save**
 5. Reload `instagram.com`
 

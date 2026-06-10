@@ -11,6 +11,7 @@
 !   ❌ Reels tab — hidden from bottom nav
 !   ❌ Explore discovery grid — hidden when search tab is opened
 !   ❌ Suggested posts — hidden from home feed
+!   ❌ Sponsored posts — hidden from home feed
 !   ❌ Ads — hidden from home feed
 !
 ! HOW TO APPLY:
@@ -48,9 +49,16 @@ www.instagram.com##div.xph46j
 www.instagram.com##article:has-text(Suggested post)
 
 ! =============================================
-! HOME FEED — Hide ads
+! HOME FEED — Hide sponsored posts
 ! =============================================
-! Sponsored posts contain a link to facebook.com/ads/ig_redirect as their
-! ad click tracker. Targeting articles that contain this URL pattern is
-! stable as it is tied to Meta's ad infrastructure, not CSS class names.
+! On mobile, Instagram labels sponsored posts with "Sponsored" as a
+! standalone line in the article. The regex anchors to newlines to avoid
+! false matches on posts that mention "sponsored" in their caption.
+www.instagram.com##article:has-text(/\nSponsored\n/)
+
+! =============================================
+! HOME FEED — Hide ads (URL-based fallback)
+! =============================================
+! Sponsored posts also contain a facebook.com/ads/ig_redirect click tracker.
+! This catches any ads the text-based rule misses.
 www.instagram.com##article:has(a[href*="ads/ig_redirect"])
