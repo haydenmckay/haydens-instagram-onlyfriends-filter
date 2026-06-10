@@ -40,20 +40,17 @@ www.instagram.com##a[href="/reels/"]
 www.instagram.com##div.xph46j
 
 ! =============================================
-! HOME FEED — Hide "You've completely caught up" banner + all articles after it
+! HOME FEED — Hide caught-up banner, "Suggested posts" heading, and all suggested articles
 ! =============================================
-! x1miatn0 confirmed: 4-child div wrapping only the caught-up component (June 2026)
+! x1miatn0: unique (count=1), wraps the 4-child caught-up component (verified June 2026)
+! x15mokao appears 64 times but :has-text scopes it to the one "Suggested posts" heading
+! div:has(div.x1miatn0) ~ article: hides all 30 articles after the caught-up point,
+!   including collab posts that don't show a Follow button
+! Follow-button rule catches any suggested posts interspersed before the caught-up point
 www.instagram.com##div.x1miatn0
-! x15mokao appears 64 times but text-scoped to the exact heading label
 www.instagram.com##div.x15mokao:has-text(/^Suggested posts$/)
-
-
-! HOME FEED — Hide individually labelled suggested posts (belt-and-suspenders)
-! =============================================
-! Catches any suggested posts that appear before the caught up banner.
-www.instagram.com##article:has-text(/\nSuggested post\n/)
-www.instagram.com##article:has-text(/\nSuggested for you\n/)
-www.instagram.com##article:has-text(/\nSuggested\n/)
+www.instagram.com##div:has(div.x1miatn0) ~ article
+www.instagram.com##div[role="button"]:has-text(/^Follow$/):upward(article)
 
 ! =============================================
 ! HOME FEED — Hide sponsored posts
