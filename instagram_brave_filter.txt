@@ -1,0 +1,56 @@
+! Instagram Focused Feed — Brave Shields Custom Filter
+! Version: 1.0
+! Last verified: June 2026
+! Tested on: Brave browser, Instagram mobile web (iPhone 12 Pro emulation, 390px)
+!
+! WHAT THIS DOES:
+!   ✅ Home feed — friends' posts and stories visible
+!   ✅ Messages — accessible
+!   ✅ Profile — accessible
+!   ✅ Search tab — visible and functional (type names to find people)
+!   ❌ Reels tab — hidden from bottom nav
+!   ❌ Explore discovery grid — hidden when search tab is opened
+!   ❌ Suggested posts — hidden from home feed
+!   ❌ Ads — hidden from home feed
+!
+! HOW TO APPLY:
+!   Brave → brave://settings/shields → Content filtering → Create custom filters
+!   Paste this entire file, click Save, reload instagram.com
+!
+! NOTE: Instagram periodically changes its CSS class names.
+!   If rules stop working, re-inspect the DOM and update the class-based rules.
+!   Href-based and text-based rules are the most stable long-term.
+
+! =============================================
+! BOTTOM NAV — Hide Reels tab
+! =============================================
+! Uses href="/reels/" — stable, not tied to CSS class names.
+! Hides the anchor link for the Reels tab in the bottom navigation bar.
+www.instagram.com##a[href="/reels/"]
+
+! =============================================
+! EXPLORE PAGE — Hide discovery/recommended grid
+! =============================================
+! Class xph46j was found only on the explore grid container and is absent
+! from the home feed DOM (verified June 2026). The search input lives in
+! the fixed header outside this element, so the search bar stays visible.
+! If this rule breaks, inspect [role="main"] > div > div > div:first-child
+! on the explore page and update the class.
+www.instagram.com##div.xph46j
+
+! =============================================
+! HOME FEED — Hide suggested posts
+! =============================================
+! Instagram labels suggested posts with a visible "Suggested post" span
+! inside the article. :has-text() matches on the article's full text content.
+! More robust than class-based targeting since Meta frequently changes
+! atomic CSS class names but keeps user-facing label text stable.
+www.instagram.com##article:has-text(Suggested post)
+
+! =============================================
+! HOME FEED — Hide ads
+! =============================================
+! Sponsored posts contain a link to facebook.com/ads/ig_redirect as their
+! ad click tracker. Targeting articles that contain this URL pattern is
+! stable as it is tied to Meta's ad infrastructure, not CSS class names.
+www.instagram.com##article:has(a[href*="ads/ig_redirect"])
