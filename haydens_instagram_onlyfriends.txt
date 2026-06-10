@@ -42,11 +42,12 @@ www.instagram.com##div.xph46j
 ! =============================================
 ! HOME FEED — Hide suggested posts
 ! =============================================
-! Instagram labels suggested posts with a visible "Suggested post" span
-! inside the article. :has-text() matches on the article's full text content.
-! More robust than class-based targeting since Meta frequently changes
-! atomic CSS class names but keeps user-facing label text stable.
-www.instagram.com##article:has-text(Suggested post)
+! Instagram labels suggested posts with "Suggested post" as a standalone
+! line in the article text. The regex anchors to newlines to avoid false
+! matches on captions that happen to mention "suggested post".
+! Also catches "Suggested for you" variant used on some surfaces.
+www.instagram.com##article:has-text(/\nSuggested post\n/)
+www.instagram.com##article:has-text(/\nSuggested for you\n/)
 
 ! =============================================
 ! HOME FEED — Hide sponsored posts
