@@ -42,12 +42,13 @@ www.instagram.com##div.xph46j
 ! =============================================
 ! HOME FEED — Hide "You've completely caught up" banner + all articles after it
 ! =============================================
-! The banner and subsequent suggested posts share the same parent container.
-! Rule 1 hides the banner itself.
-! Rule 2 uses the CSS general sibling combinator ~ to hide all articles
-! that follow the banner in the DOM — these are the suggested/doom-scroll posts.
-www.instagram.com##div:has-text(You've completely caught up)
-www.instagram.com##div:has-text(You've completely caught up) ~ article
+! The caught up component contains a div with class x6s0dn4 at its core.
+! Rule 1 hides the banner wrapper (the div two levels above x6s0dn4).
+! Rule 2 uses native CSS :has() + ~ sibling combinator to hide all articles
+! that follow the banner — these are the suggested/doom-scroll posts.
+! Note: x6s0dn4 is a Stylex atomic class that may change with Instagram deploys.
+www.instagram.com##div:has(> div > div.x6s0dn4)
+www.instagram.com##div:has(> div > div.x6s0dn4) ~ article
 
 ! HOME FEED — Hide individually labelled suggested posts (belt-and-suspenders)
 ! =============================================
