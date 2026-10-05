@@ -52,12 +52,6 @@ www.instagram.com##div.x15mokao:has-text(/^Suggested posts$/)
 www.instagram.com##div:has(div.x1miatn0) ~ article
 www.instagram.com##div[role="button"]:has-text(/^Follow$/):upward(article)
 
-! "Suggested for you" posts: label sits under the username in the post header
-! ("X and N others"), with no Follow button, so the rules above miss them.
-! Match the label as a standalone element and hide the whole article.
-www.instagram.com##span:has-text(/^Suggested for you$/):upward(article)
-www.instagram.com##div:has-text(/^Suggested for you$/):upward(article)
-
 ! =============================================
 ! HOME FEED — Hide sponsored posts
 ! =============================================
