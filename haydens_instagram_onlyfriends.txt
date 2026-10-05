@@ -1,7 +1,7 @@
 ! Haydens Instagram OnlyFriends Filter — Brave Shields Custom Filter
-! Version: 1.0
-! Last verified: June 2026
-! Tested on: Brave browser, Instagram mobile web (iPhone 12 Pro emulation, 390px)
+! Version: 1.1
+! Last verified: October 2026
+! Tested on: Brave iOS (iPhone 12), plus desktop mobile emulation
 !
 ! WHAT THIS DOES:
 !   ✅ Home feed — friends' posts and stories visible
@@ -10,7 +10,7 @@
 !   ✅ Search tab — visible and functional (type names to find people)
 !   ❌ Reels tab — hidden from bottom nav
 !   ❌ Explore discovery grid — hidden when search tab is opened
-!   ❌ Suggested posts — hidden from home feed
+!   ❌ Suggested posts — hidden from home feed (incl. "Suggested for you" collabs)
 !   ❌ Sponsored posts — hidden from home feed
 !   ❌ Ads — hidden from home feed
 !
@@ -21,6 +21,10 @@
 ! NOTE: Instagram periodically changes its CSS class names.
 !   If rules stop working, re-inspect the DOM and update the class-based rules.
 !   Href-based and text-based rules are the most stable long-term.
+!
+! HIDDEN POSTS ARE COLLAPSED, NOT REMOVED: feed articles are shrunk to a 40px
+!   invisible strip with :style() instead of display:none. Plain ## hiding makes
+!   the feed go permanently black (see "Why collapse" below).
 
 ! =============================================
 ! BOTTOM NAV — Hide Reels tab
@@ -47,11 +51,6 @@ www.instagram.com##div.xph46j
 ! div:has(div.x1miatn0) ~ article: hides all 30 articles after the caught-up point,
 !   including collab posts that don't show a Follow button
 ! Follow-button rule catches any suggested posts interspersed before the caught-up point
-!
-! ARTICLES ARE COLLAPSED TO A 40px INVISIBLE STRIP, NOT display:none (Oct 2026, see
-! "Why visibility" below). TEST BRANCH: trades the post-sized gaps of the
-! visibility:hidden version for a thin strip. In desktop tests at bot scroll speed it
-! occasionally went blank for ~30s before recovering.
 www.instagram.com##div.x1miatn0
 www.instagram.com##div.x15mokao:has-text(/^Suggested posts$/)
 www.instagram.com##div:has(div.x1miatn0) ~ article:style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
@@ -68,15 +67,18 @@ www.instagram.com##div[role="button"]:has-text(/^Follow$/):upward(article):style
 ! :has-text matches textContent, so it doesn't matter which label is currently showing.
 www.instagram.com##span:has-text(/^Suggested for you$/):upward(article):style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
 
-! Why visibility: the home feed is a virtualized list (container uses a large inline
-! padding-bottom for off-screen items). An article with display:none measures 0px,
-! which breaks the list's position math. The viewport ends up inside the empty
-! padding and the feed stays black ("infinite black feed"). This reproduced on the
-! plain June-2026 rules too, on an account where ~2/3 of the feed is suggested.
-! visibility:hidden keeps each hidden post's real height, so the list stays in sync
-! and keeps loading. The cost is a post-sized blank gap where a hidden post was.
-! Collapsing to a small stub (40px) mostly worked but still drifted into the padding
-! for ~30s at a time (1px untested: the test tab hung). Don't switch these back to plain ## hiding.
+! Why collapse instead of display:none: the home feed is a virtualized list (its
+! container uses a large inline padding-bottom for off-screen posts). A post with
+! display:none measures 0px, which breaks the list's position math. You end up
+! scrolled into the empty padding and the feed stays black ("infinite black feed").
+! This happened with the June-2026 rules too, once enough posts were hidden.
+! Options tested (Oct 2026):
+!   display:none       — black feed within ~15-25s on a suggestion-heavy account
+!   visibility:hidden  — stable, but leaves a post-sized blank gap per hidden post
+!   40px strip (used)  — near-stacked feed, stable on iPhone in normal use; in fast
+!                        desktop bot-scrolling it occasionally blanked ~30s, then recovered
+! If the black feed comes back, switch :style() to just "visibility: hidden !important".
+! Don't switch these back to plain ## hiding.
 
 ! =============================================
 ! HOME FEED — Hide sponsored posts
@@ -94,11 +96,12 @@ www.instagram.com##article:has-text(/\nSponsored\n/):style(height: 40px !importa
 www.instagram.com##article:has(a[href*="ads/ig_redirect"]):style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
 
 ! =============================================
-! EXPERIMENTAL — Pinch-zoom jump fix (iOS)
+! Pinch-zoom jump fix (iOS)
 ! =============================================
 ! Pinch-zooming a photo made the page jump to another post. Hypothesis: Safari
 ! scroll anchoring reacts to the feed re-measuring on visual-viewport change.
-! Disabling overflow-anchor on the scroll roots should stop the jump.
+! Disabling overflow-anchor on the scroll roots reduced the jump on iPhone
+! (Oct 2026, observed on device; can't be reproduced in desktop emulation).
 ! Separate rules: a comma list with :style() may only apply to the last selector.
 www.instagram.com##html:style(overflow-anchor: none !important)
 www.instagram.com##body:style(overflow-anchor: none !important)

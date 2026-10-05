@@ -2,7 +2,7 @@
 
 A custom filter list for Brave Shields that strips Instagram mobile web down to what matters: your friends' posts, stories, messages, and profile — nothing else.
 
-**Version 1.0 — Verified June 2026**
+**Version 1.1 — Verified October 2026 (Brave iOS)**
 
 ---
 
@@ -16,7 +16,7 @@ A custom filter list for Brave Shields that strips Instagram mobile web down to 
 | Search tab (can type names) | ✅ Visible |
 | Reels tab | ❌ Hidden |
 | Explore discovery grid | ❌ Hidden |
-| Suggested posts in feed | ❌ Hidden |
+| Suggested posts in feed (incl. "Suggested for you" collabs) | ❌ Hidden |
 | Ads in feed | ❌ Hidden |
 
 ---
@@ -70,20 +70,47 @@ On the explore page, the search input lives in a fixed header outside `[role="ma
 
 #### 3. Hide suggested posts
 ```
-www.instagram.com##article:has-text(Suggested post)
+www.instagram.com##div:has(div.x1miatn0) ~ article:style(...)
+www.instagram.com##div[role="button"]:has-text(/^Follow$/):upward(article):style(...)
+www.instagram.com##span:has-text(/^Suggested for you$/):upward(article):style(...)
 ```
-Instagram labels suggested posts with the visible text "Suggested post" inside the article. `:has-text()` matches the full text content of the article element. This is the most durable approach since user-facing label text is far more stable than CSS class names.
+- **After the "caught up" banner:** every article after it is suggested, so all of them are hidden.
+- **Follow button:** suggested posts from single accounts show a Follow button; friends' posts don't.
+- **"Suggested for you" collabs:** collab posts ("A and B" byline) have no Follow button. The line under the username *looks* like it rotates between "Suggested for you" and "<audio> • Original audio", but both are in the DOM the whole time and only their visibility animates. So a `<span>` whose text is exactly "Suggested for you" is present on every suggested post and never on friends' posts, including friends' collabs. No non-text anchor exists: classes, `data-*`, aria-labels, roles and hrefs on the post header are the same for suggested and friends' posts (checked Oct 2026).
 
 **What didn't work:**
-- `div[data-reel-type="suggested"]` — Instagram no longer adds this data attribute (may have worked in earlier versions)
-- `article:has(span:has-text(Suggested post))` — nested procedural filter partially worked but missed some posts
-- `article:has(span.x193iq5w.xeuugli.x1fj9vlw.x13faqbe.x1vvkbs.x1i0vuye)` — class combo is shared with username/caption text in regular friend posts, causing friend posts to be hidden too
+- `div[data-reel-type="suggested"]` — Instagram no longer adds this data attribute
+- `article:has(span.x193iq5w...)` — that class combo is shared with friends' usernames and captions
+- Hiding with plain `##` (display:none) — see *Collapsing, not hiding* below
+
+#### Collapsing, not hiding
+
+Every rule that hides a feed post ends in:
+```
+:style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
+```
+Instagram's home feed is a virtualized list: posts that are off screen are replaced by one big padding block. A post hidden with `display:none` measures 0px, which breaks the list's position math. You end up scrolled into the empty padding and the feed goes permanently black. Shrinking hidden posts to an invisible 40px strip keeps them measurable, so the feed keeps loading and your friends' posts still sit almost back to back.
+
+| Method tested | Result |
+|---|---|
+| `display:none` | Feed went black within ~15–25s on a suggestion-heavy account |
+| `visibility: hidden` | Stable, but leaves a post-sized blank gap per hidden post |
+| 40px invisible strip (used) | Near-stacked feed; stable on iPhone in normal use |
+
+If the black feed comes back, change the `:style()` to just `visibility: hidden !important` (stable but gappy).
 
 #### 4. Hide ads
 ```
-www.instagram.com##article:has(a[href*="ads/ig_redirect"])
+www.instagram.com##article:has(a[href*="ads/ig_redirect"]):style(...)
 ```
 Sponsored posts contain a `facebook.com/ads/ig_redirect` URL as their ad click tracker. This is tied to Meta's ad infrastructure rather than any CSS class, making it robust against redeployments.
+
+#### 5. Pinch-zoom jump fix (iOS)
+```
+www.instagram.com##html:style(overflow-anchor: none !important)
+www.instagram.com##body:style(overflow-anchor: none !important)
+```
+Pinch-zooming a photo made the page jump to a different post. Turning off scroll anchoring on the page roots reduced this on iPhone. It can't be reproduced in desktop emulation, so it's only been checked on a phone.
 
 ---
 
@@ -102,5 +129,5 @@ Href-based and `:has-text()`-based rules should remain stable long-term.
 
 ## Tested on
 
-- Brave browser (desktop + mobile emulation)
-- Instagram mobile web, June 2026
+- Brave iOS on iPhone 12, Instagram mobile web, October 2026
+- Brave desktop in mobile emulation (June 2026; rule logic re-checked October 2026)
