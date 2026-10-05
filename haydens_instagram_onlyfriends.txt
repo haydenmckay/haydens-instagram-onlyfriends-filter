@@ -66,3 +66,13 @@ www.instagram.com##article:has-text(/\nSponsored\n/)
 ! Sponsored posts also contain a facebook.com/ads/ig_redirect click tracker.
 ! This catches any ads the text-based rule misses.
 www.instagram.com##article:has(a[href*="ads/ig_redirect"])
+
+! =============================================
+! EXPERIMENTAL — Pinch-zoom jump fix (iOS)
+! =============================================
+! Pinch-zooming a photo made the page jump to another post. Hypothesis: Safari
+! scroll anchoring reacts to the feed re-measuring on visual-viewport change.
+! Disabling overflow-anchor on the scroll roots should stop the jump.
+! Separate rules: a comma list with :style() may only apply to the last selector.
+www.instagram.com##html:style(overflow-anchor: none !important)
+www.instagram.com##body:style(overflow-anchor: none !important)
