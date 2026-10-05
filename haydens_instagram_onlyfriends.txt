@@ -48,11 +48,14 @@ www.instagram.com##div.xph46j
 !   including collab posts that don't show a Follow button
 ! Follow-button rule catches any suggested posts interspersed before the caught-up point
 !
-! ARTICLES ARE MADE INVISIBLE, NOT display:none (Oct 2026, see "Why visibility" below).
+! ARTICLES ARE COLLAPSED TO A 40px INVISIBLE STRIP, NOT display:none (Oct 2026, see
+! "Why visibility" below). TEST BRANCH: trades the post-sized gaps of the
+! visibility:hidden version for a thin strip. In desktop tests at bot scroll speed it
+! occasionally went blank for ~30s before recovering.
 www.instagram.com##div.x1miatn0
 www.instagram.com##div.x15mokao:has-text(/^Suggested posts$/)
-www.instagram.com##div:has(div.x1miatn0) ~ article:style(visibility: hidden !important)
-www.instagram.com##div[role="button"]:has-text(/^Follow$/):upward(article):style(visibility: hidden !important)
+www.instagram.com##div:has(div.x1miatn0) ~ article:style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
+www.instagram.com##div[role="button"]:has-text(/^Follow$/):upward(article):style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
 
 ! "Suggested for you" posts with no Follow button (collabs: "A and B" byline).
 ! The line under the username looks like it rotates between "Suggested for you"
@@ -63,7 +66,7 @@ www.instagram.com##div[role="button"]:has-text(/^Follow$/):upward(article):style
 ! No non-text anchor exists: header classes, data-*, aria-labels, roles and hrefs are
 ! identical between suggested and friend posts (verified Oct 2026, 37 posts).
 ! :has-text matches textContent, so it doesn't matter which label is currently showing.
-www.instagram.com##span:has-text(/^Suggested for you$/):upward(article):style(visibility: hidden !important)
+www.instagram.com##span:has-text(/^Suggested for you$/):upward(article):style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
 
 ! Why visibility: the home feed is a virtualized list (container uses a large inline
 ! padding-bottom for off-screen items). An article with display:none measures 0px,
@@ -81,14 +84,14 @@ www.instagram.com##span:has-text(/^Suggested for you$/):upward(article):style(vi
 ! On mobile, Instagram labels sponsored posts with "Sponsored" as a
 ! standalone line in the article. The regex anchors to newlines to avoid
 ! false matches on posts that mention "sponsored" in their caption.
-www.instagram.com##article:has-text(/\nSponsored\n/):style(visibility: hidden !important)
+www.instagram.com##article:has-text(/\nSponsored\n/):style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
 
 ! =============================================
 ! HOME FEED — Hide ads (URL-based fallback)
 ! =============================================
 ! Sponsored posts also contain a facebook.com/ads/ig_redirect click tracker.
 ! This catches any ads the text-based rule misses.
-www.instagram.com##article:has(a[href*="ads/ig_redirect"]):style(visibility: hidden !important)
+www.instagram.com##article:has(a[href*="ads/ig_redirect"]):style(height: 40px !important; min-height: 0 !important; overflow: hidden !important; visibility: hidden !important)
 
 ! =============================================
 ! EXPERIMENTAL — Pinch-zoom jump fix (iOS)
